@@ -1,20 +1,19 @@
 'use strict';
 
-var app = require('app');
+var app           = require('app');
 var BrowserWindow = require('browser-window');
-var env = require('./vendor/electron_boilerplate/env_config');
-var devHelper = require('./vendor/electron_boilerplate/dev_helper');
-var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
+var config        = require('./app-config');
+var windowState   = require('./server/utils/window-state');
 
 var mainWindow;
 
 // Preserver of the window size and position between app launches.
-var mainWindowState = windowStateKeeper('main', {
+var mainWindowState = windowState('main', {
     width: 1000,
     height: 600
 });
 
-app.on('ready', function () {
+app.on('ready', function() {
 
     mainWindow = new BrowserWindow({
         x: mainWindowState.x,
@@ -29,16 +28,15 @@ app.on('ready', function () {
 
     mainWindow.loadUrl('file://' + __dirname + '/app.html');
 
-    if (env.name === 'development') {
-        devHelper.setDevMenu();
+    if (config.name === 'development') {
         mainWindow.openDevTools();
     }
 
-    mainWindow.on('close', function () {
+    mainWindow.on('close', function() {
         mainWindowState.saveState(mainWindow);
     });
 });
 
-app.on('window-all-closed', function () {
+app.on('window-all-closed', function() {
     app.quit();
 });

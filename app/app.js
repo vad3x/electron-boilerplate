@@ -1,17 +1,21 @@
-// -----------------------------------------------------
-// Here is the starting point for your own code.
-// All stuff below is just to show you how it works.
-// -----------------------------------------------------
+'use strict';
 
-// Browser modules are imported through new ES6 syntax.
-import { greet } from './hello_world/hello_world';
+var config = require('./app-config');
 
-// Node modules are required the same way as always.
-var os = require('os');
+// Electron modules
+var os       = require('os');
+var remote   = require('remote');
+var shell    = require('shell');
 
-// window.env contains data from config/env_XXX.json file.
-var envName = window.env.name;
+// Browser modules
+import { lodash } from 'lodash';
+import Startup from './browser/startup';
 
-document.getElementById('greet').innerHTML = greet();
-document.getElementById('platform-info').innerHTML = os.platform();
-document.getElementById('env-name').innerHTML = envName;
+let options = {
+  config,
+  remote,
+  shell,
+  os
+};
+
+new Startup(options);
